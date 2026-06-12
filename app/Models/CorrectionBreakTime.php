@@ -20,7 +20,7 @@ class CorrectionBreakTime extends Model
         'corrected_break_end_at'
     ];
 
-    public function correct(): BelongsTo
+    public function correction(): BelongsTo
     {
         return $this->belongsTo(Correction::class);
     }
