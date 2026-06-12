@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -42,4 +43,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * ユーザーが管理者かどうかを判定する
+     * 
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->is_admin === true;
+    }
+
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function corrections(): HasMany
+    {
+        return $this->hasMany(Correction::class);
+    }
 }
