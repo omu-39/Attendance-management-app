@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Attendance extends Model
+class Correction extends Model
 {
     use HasFactory;
 
@@ -18,9 +17,11 @@ class Attendance extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'work_date',
-        'clock_in_at',
-        'clock_out_at',
+        'corrected_clock_at',
+        'corrected_out_at',
+        'status',
+        'remarks',
+        'requested_date',
     ];
 
     public function user(): BelongsTo
@@ -28,13 +29,13 @@ class Attendance extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function correction(): HasOne
+    public function attendance(): BelongsTo
     {
-        return $this->hasOne(Correction::class);
+        return $this->belongsTo(Attendance::class);
     }
 
-    public function breakTimes(): HasMany
+    public function correctionBreakTimes(): HasMany
     {
-        return $this->hasMany(BreakTime::class);
+        return $this-> hasMany(CorrectionBreakTime::class);
     }
 }

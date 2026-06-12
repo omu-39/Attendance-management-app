@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('correction_breaks');
+        Schema::dropIfExists('correction_break_times');
     }
 };
