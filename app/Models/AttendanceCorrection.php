@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Correction extends Model
+class AttendanceCorrection extends Model
 {
     use HasFactory;
 
@@ -36,6 +36,6 @@ class Correction extends Model
 
     public function correctionBreakTimes(): HasMany
     {
-        return $this-> hasMany(CorrectionBreakTime::class);
+        return $this->hasMany(AttendanceCorrectionBreakTime::class);
     }
 }

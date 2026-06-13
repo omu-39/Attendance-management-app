@@ -61,6 +61,6 @@ class User extends Authenticatable
 
     public function corrections(): HasMany
     {
-        return $this->hasMany(Correction::class);
+        return $this->hasMany(AttendanceCorrection::class);
     }
 }
