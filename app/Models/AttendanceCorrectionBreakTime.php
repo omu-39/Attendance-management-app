@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class BreakTime extends Model
+class AttendanceCorrectionBreakTime extends Model
 {
     use HasFactory;
 
@@ -16,12 +16,12 @@ class BreakTime extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'break_start_at',
-        'break_end_at'
+        'corrected_break_start_at',
+        'corrected_break_end_at'
     ];
 
-    public function attendance(): BelongsTo
+    public function correction(): BelongsTo
     {
-        return $this->belongsTo(Attendance::class);
+        return $this->belongsTo(AttendanceCorrection::class);
     }
 }
