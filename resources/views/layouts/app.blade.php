@@ -8,7 +8,7 @@
     @vite('resources/css/app.css')
 </head>
 
-<body>
+<body class="bg-[#F0EFF2]">
     <x-header />
     <main>
         @yield('content')

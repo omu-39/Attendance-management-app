@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,7 @@ class Attendance extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_id',
         'work_date',
         'clock_in_at',
         'clock_out_at',
@@ -36,5 +38,17 @@ class Attendance extends Model
     public function breakTimes(): HasMany
     {
         return $this->hasMany(AttendanceBreakTime::class);
+    }
+
+    /**
+     * 出勤済みかどうかを判定する
+     *
+     * clock_in_at が存在すれば出勤済み
+     *
+     * @return bool 出勤済みの場合 true
+     */
+    public function isClockedIn(): bool
+    {
+        return $this->clock_in_at !== null;
     }
 }
