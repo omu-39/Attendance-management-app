@@ -41,6 +41,7 @@
                     <td>{{ $attendance->clock_in_at }}</td>
                     <td>{{ $attendance->clock_out_at }}</td>
                     <td>{{ $attendance->clock_in_at }}</td>
+                    <td>{{ $attendance->getTotalBreakTime() }}</td>
                 </tr>
                 @endforeach
             </tbody>

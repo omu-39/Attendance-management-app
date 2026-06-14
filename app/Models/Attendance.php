@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 class Attendance extends Model
 {
@@ -35,7 +36,7 @@ class Attendance extends Model
         return $this->hasOne(AttendanceCorrection::class);
     }
 
-    public function breakTimes(): HasMany
+    public function attendanceBreakTimes(): HasMany
     {
         return $this->hasMany(AttendanceBreakTime::class);
     }
@@ -99,5 +100,23 @@ class Attendance extends Model
         }
 
         return 'working';
+    }
+
+    /**
+     * 合計休憩時間の取得
+     * 
+     * @return string HH:MM
+     */
+    public function getTotalBreakTime():string
+    {
+        $totalMinutes = $this->attendanceBreakTimes->sum(function ($breakTime) {
+            if (!$breakTime->break_end_at) {
+                return 0;
+            }
+            return Carbon::parse($breakTime->break_start_at)
+                ->diffInMinutes($breakTime->break_end_at);
+        });
+
+        return sprintf('%d:%02d', intdiv($totalMinutes, 60), $totalMinutes % 60);
     }
 }
