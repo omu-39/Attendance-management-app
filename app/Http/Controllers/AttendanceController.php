@@ -17,7 +17,7 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        $today = Carbon::today()->locale('ja');
+        $today = Carbon::today();
         $nowTime = Carbon::now()->format('H:i');
         $attendance = Attendance::where('user_id', Auth::id())
             ->where('work_date', $today)

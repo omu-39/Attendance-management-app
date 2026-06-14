@@ -3,10 +3,10 @@
 @section('title', 'ログイン')
 
 @section('content')
-<div class="w-[680px] mx-auto">
+<div class="min-h-screen bg-white">
     <x-heading title="ログイン" />
 
-    <form action="/login" method="post" novalidate>
+    <form action="/login" method="post" novalidate class="w-[680px] mx-auto">
         @csrf
         <x-form-input label="メールアドレス" name="email" type="email" />
         <x-form-input label="パスワード" name="password" type="password" />

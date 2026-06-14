@@ -3,10 +3,10 @@
 @section('title', '会員登録')
 
 @section('content')
-    <div class="w-[680px] mx-auto">
+    <div class="min-h-screen bg-white">
         <x-heading title="会員登録" />
     
-        <form action="/register" method="post" novalidate>
+        <form action="/register" method="post" novalidate class="w-[680px] mx-auto">
             @csrf
             <x-form-input label="ユーザー名" name="name" />
             <x-form-input label="メールアドレス" name="email" type="email" />
