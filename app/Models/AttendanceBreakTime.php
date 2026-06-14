@@ -16,6 +16,7 @@ class AttendanceBreakTime extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'attendance_id',
         'break_start_at',
         'break_end_at'
     ];

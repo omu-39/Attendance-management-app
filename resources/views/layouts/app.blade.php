@@ -8,9 +8,9 @@
     @vite('resources/css/app.css')
 </head>
 
-<body class="bg-[#F0EFF2]">
+<body>
     <x-header />
-    <main>
+    <main class="w-full min-h-screen bg-[#F0EFF2]">
         @yield('content')
     </main>
 </body>

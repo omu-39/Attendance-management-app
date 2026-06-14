@@ -14,9 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
-Route::post('/attendance', [AttendanceController::class, 'create'])->name('attendance.create');
-
-
 Route::middleware(['auth'])->group(function () {
+    Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+    Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clockIn');
+    Route::post('/attendance/{attendance}/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clockOut');
+    Route::post('/attendance/{attendance}/break-start', [AttendanceController::class, 'breakStart'])->name('attendance.breakStart');
+    Route::post('/attendance/{attendance}/break-end', [AttendanceController::class, 'breakEnd'])->name('attendance.breakEnd');
 });

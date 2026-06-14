@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use App\Models\Attendance;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Attendance;
+use App\Models\AttendanceBreakTime;
 
 class AttendanceController extends Controller
 {
@@ -22,32 +23,86 @@ class AttendanceController extends Controller
             ->where('work_date', Carbon::today())
             ->first();
 
-        return view('attendance.create', compact('today', 'nowTime', 'attendance'));
+        $status = $attendance?->getStatus() ?? 'off';
+
+        return view('attendance.create', compact('today', 'nowTime', 'status', 'attendance'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 出勤日時の保存処理
+     * 
+     * 出勤ボタンが押された時の時間を保存
+     * 
+     * @return redirect
      */
-    public function create()
+    public function clockIn()
     {
-        $workDate = Carbon::today();
-        $clockIn = Carbon::now();
+        $today = Carbon::today();
+        $nowTime = Carbon::now();
 
         $attendance = Attendance::create([
             'user_id' => Auth::id(),
-            'work_date' => $workDate,
-            'clock_in_at' => $clockIn,
+            'work_date' => $today,
+            'clock_in_at' => $nowTime,
         ]);
 
         return redirect()->route('attendance.index', compact('attendance'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 退勤日時の保存処理
+     * 
+     * 退勤ボタンが押された時の時間を保存
+     * 
+     * @return redirect
      */
-    public function store(Request $request)
+    public function clockOut(Attendance $attendance)
     {
-        //
+        $nowTime = Carbon::now();
+
+        $attendance->update([
+            'clock_out_at' => $nowTime,
+        ]);
+
+        return redirect()->route('attendance.index', compact('attendance'));
+    }
+
+    /**
+     * 休憩に入った時間の保存処理
+     * 
+     * 休憩入ボタンが押された時の時間を保存
+     * 
+     * @return redirect
+     */
+    public function breakStart(Attendance $attendance)
+    {
+        $nowTime = Carbon::now();
+        
+        AttendanceBreakTime::Create([
+            'attendance_id' => $attendance->id,
+            'break_start_at' => $nowTime,
+        ]);
+
+        return redirect()->route('attendance.index', compact('attendance'));
+    }
+
+    /**
+     * 休憩から戻った時間の保存処理
+     * 
+     * 休憩戻ボタンが押された時の時間を保存
+     * 
+     * @return redirect
+     */
+    public function breakEnd(Attendance $attendance)
+    {
+        $nowTime = Carbon::now();
+
+        $breakTime = $attendance->breakTimes()->whereNull('break_end_at')->firstOrFail();
+        $breakTime->update([
+            'break_end_at' => $nowTime,
+        ]);
+
+        return redirect()->route('attendance.index', compact('attendance'));
     }
 
     /**
@@ -62,22 +117,6 @@ class AttendanceController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
     {
         //
     }
