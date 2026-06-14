@@ -10,7 +10,7 @@
 
 <body>
     <x-header />
-    <main>
+    <main class="w-full min-h-screen bg-[#F0EFF2]">
         @yield('content')
     </main>
 </body>

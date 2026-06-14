@@ -18,6 +18,8 @@ return new class extends Migration
             $table->dateTime('clock_in_at')->nullable();
             $table->dateTime('clock_out_at')->nullable();
             $table->timestamps();
+            // 打刻の重複を防ぐためユーザーと日にちをセットでユニーク制約をかける
+            $table->unique(['user_id', 'work_date']);
         });
     }
 
