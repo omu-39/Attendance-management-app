@@ -20,7 +20,7 @@ class AttendanceController extends Controller
         $today = Carbon::today()->locale('ja');
         $nowTime = Carbon::now()->format('H:i');
         $attendance = Attendance::where('user_id', Auth::id())
-            ->where('work_date', Carbon::today())
+            ->where('work_date', $today)
             ->first();
 
         $status = $attendance?->getStatus() ?? 'off';
@@ -103,21 +103,5 @@ class AttendanceController extends Controller
         ]);
 
         return redirect()->route('attendance.index', compact('attendance'));
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 }
