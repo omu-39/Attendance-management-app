@@ -97,7 +97,7 @@ class AttendanceController extends Controller
     {
         $nowTime = Carbon::now();
 
-        $breakTime = $attendance->breakTimes()->whereNull('break_end_at')->firstOrFail();
+        $breakTime = $attendance->AttendanceBreakTimes()->whereNull('break_end_at')->firstOrFail();
         $breakTime->update([
             'break_end_at' => $nowTime,
         ]);

@@ -26,6 +26,12 @@ class Attendance extends Model
         'clock_out_at',
     ];
 
+    protected $casts = [
+        'work_date' => 'date',
+        'clock_in_at'  => 'datetime',
+        'clock_out_at' => 'datetime',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -74,7 +80,7 @@ class Attendance extends Model
      */
     public function isBreaking(): bool
     {
-        return $this->breakTimes()->whereNull('break_end_at')->exists();
+        return $this->AttendanceBreakTimes()->whereNull('break_end_at')->exists();
     }
 
     /**
@@ -104,7 +110,7 @@ class Attendance extends Model
 
     /**
      * 合計休憩時間の取得
-     * 
+     *
      * @return string HH:MM
      */
     public function getTotalBreakTime():string
@@ -118,5 +124,42 @@ class Attendance extends Model
         });
 
         return sprintf('%d:%02d', intdiv($totalMinutes, 60), $totalMinutes % 60);
+    }
+
+    /**
+     * 合計労働時間の取得
+     *
+     * @return string HH:MM
+     */
+    public function getTotalWorkTime(): string
+    {
+        if (!$this->clock_in_at || !$this->clock_out_at) {
+            return '0:00';
+        }
+
+        $totalMinutes = Carbon::parse($this->clock_in_at)
+            ->diffInMinutes($this->clock_out_at);
+
+        $breakMinutes = $this->attendanceBreakTimes->sum(function ($breakTime) {
+            if (!$breakTime->break_end_at) {
+                return 0;
+            }
+            return Carbon::parse($breakTime->break_start_at)
+                ->diffInMinutes($breakTime->break_end_at);
+        });
+
+        $workMinutes = $totalMinutes - $breakMinutes;
+
+        return sprintf('%d:%02d', intdiv($workMinutes, 60), $workMinutes % 60);
+    }
+
+    /**
+     * この勤怠を登録したユーザー名の取得
+     * 
+     * @return string ユーザー名
+     */
+    public function getUserName(): string
+    {
+        return $this->user->name ?? '';
     }
 }

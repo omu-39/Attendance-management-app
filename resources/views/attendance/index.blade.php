@@ -23,10 +23,10 @@
             </button>
         </div>
 
-        <table>
+        <table class="mt-8 w-full bg-white text-[#737373] text-[16px] font-bold text-center rounded-xl tracking-widest">
             <thead>
-                <tr>
-                    <th>日付</th>
+                <tr class="border-b-2 border-[#F0EFF2]">
+                    <th class="text-left w-40 py-[6px] px-10">日付</th>
                     <th>出勤</th>
                     <th>退勤</th>
                     <th>休憩</th>
@@ -36,12 +36,13 @@
             </thead>
             <tbody>
                 @foreach ($attendances as $attendance)
-                <tr>
-                    <td>{{ $attendance->work_date }}</td>
-                    <td>{{ $attendance->clock_in_at }}</td>
-                    <td>{{ $attendance->clock_out_at }}</td>
-                    <td>{{ $attendance->clock_in_at }}</td>
+                <tr class="border-b-2 border-[#F0EFF2] py-15">
+                    <td class="text-left w-40 py-[6px] px-10">{{ $attendance->work_date->isoFormat('MM/DD(ddd)') }}</td>
+                    <td>{{ $attendance->clock_in_at?->format('H:i') }}</td>
+                    <td>{{ $attendance->clock_out_at?->format('H:i') }}</td>
                     <td>{{ $attendance->getTotalBreakTime() }}</td>
+                    <td>{{ $attendance->getTotalWorkTime() }}</td>
+                    <td class="text-black"><a href="/attendance/detail/{id}">詳細</a></td>
                 </tr>
                 @endforeach
             </tbody>

@@ -15,7 +15,7 @@ class AttendanceListController extends Controller
     public function index()
     {
         $month = Carbon::now()->format('Y/m');
-        $attendances = Attendance::with('attendanceBreakTimes')
+        $attendances = Attendance::with('attendanceBreakTimes', 'user')
             ->whereMonth('work_date', now()->month)
             ->get();
 
@@ -41,9 +41,10 @@ class AttendanceListController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Attendance $attendance)
     {
-        //
+        $breakTimes = AttendanceBreakTime::where('attendance_id', $attendance->id);
+        return view('attendance.show', compact('attendance', 'breakTimes'));
     }
 
     /**

@@ -21,7 +21,7 @@
                 退勤済
             </p>
         @endif
-
+        
         <p class="mt-6 text-[36px]">
             {{ $today->isoFormat('YYYY年M月DD日(ddd)') }}
         </p>
