@@ -15,8 +15,8 @@
                 </tr>
                 <tr>
                     <th>日付</th>
-                    <td>{{ $attendance->work_date->format('MM/DD(dd)') }}</td>
-                    <td>{{ $attendance->work_date }}</td>
+                    <td>{{ $attendance->work_date?->isoFormat('YYYY年') }}</td>
+                    <td>{{ $attendance->work_date?->isoFormat('MM/DD(ddd)') }}</td>
                 </tr>
                 <tr>
                     <th>出勤・退勤</th>

@@ -42,7 +42,7 @@
                     <td>{{ $attendance->clock_out_at?->format('H:i') }}</td>
                     <td>{{ $attendance->getTotalBreakTime() }}</td>
                     <td>{{ $attendance->getTotalWorkTime() }}</td>
-                    <td class="text-black"><a href="/attendance/detail/{id}">詳細</a></td>
+                    <td class="text-black"><a href="/attendance/detail/{{ $attendance->id }}">詳細</a></td>
                 </tr>
                 @endforeach
             </tbody>

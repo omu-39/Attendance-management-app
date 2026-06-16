@@ -41,9 +41,10 @@ class AttendanceListController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Attendance $attendance)
+    public function show(string $id)
     {
-        $breakTimes = AttendanceBreakTime::where('attendance_id', $attendance->id);
+        $attendance = Attendance::with('user')->findOrFail($id);
+        $breakTimes = AttendanceBreakTime::where('attendance_id', $id)->get();
         return view('attendance.show', compact('attendance', 'breakTimes'));
     }
 
