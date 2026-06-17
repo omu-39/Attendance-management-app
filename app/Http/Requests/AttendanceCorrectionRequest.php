@@ -11,7 +11,7 @@ class AttendanceCorrectionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,10 +24,10 @@ class AttendanceCorrectionRequest extends FormRequest
         return [
             'name' => 'required',
             'work_date' => 'required',
-            'clock_in_at' => 'required|datetime|before:clock_out_at',
-            'clock_out_at' => 'required|datetime|after:clock_in_at',
-            'break_start_at[]' => 'required|datetime|after:clock_in_at|before:clock_out_at',
-            'break_end_at[]' => 'required|datetime|before:clock_out_at',
+            'clock_in_at' => 'required|date_format:H:i|before:clock_out_at',
+            'clock_out_at' => 'required|date_format:H:i|after:clock_in_at',
+            'break_start_at[]' => 'required|date_format:H:i|after:clock_in_at|before:clock_out_at',
+            'break_end_at[]' => 'required|date_format:H:i|before:clock_out_at',
             'remarks' => 'required',
         ];
     }

@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('corrections', function (Blueprint $table) {
+        Schema::create('attendance_corrections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('attendance_id')->constrained()->cascadeOnDelete();
+            $table->date('corrected_work_date');
             $table->dateTime('corrected_clock_in_at');
             $table->dateTime('corrected_clock_out_at');
             $table->string('status');
