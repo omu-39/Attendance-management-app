@@ -109,27 +109,35 @@ class Attendance extends Model
     }
 
     /**
-     * 合計休憩時間の取得
+     * 合計休憩時間（分）の取得
      *
-     * @return string HH:MM
+     * @return int
      */
-    public function getTotalBreakTime():string
+    private function getTotalBreakMinutes(): int
     {
-        $totalMinutes = $this->attendanceBreakTimes->sum(function ($breakTime) {
+        return $this->attendanceBreakTimes->sum(function ($breakTime) {
             if (!$breakTime->break_end_at) {
                 return 0;
             }
-            return Carbon::parse($breakTime->break_start_at)
-                ->diffInMinutes($breakTime->break_end_at);
+            return $breakTime->break_start_at->diffInMinutes($breakTime->break_end_at);
         });
+    }
 
+    /**
+     * 合計休憩時間の取得
+     *
+     * @return string
+     */
+    public function getTotalBreakTime(): string
+    {
+        $totalMinutes = $this->getTotalBreakMinutes();
         return sprintf('%d:%02d', intdiv($totalMinutes, 60), $totalMinutes % 60);
     }
 
     /**
      * 合計労働時間の取得
      *
-     * @return string HH:MM
+     * @return string
      */
     public function getTotalWorkTime(): string
     {
@@ -137,29 +145,9 @@ class Attendance extends Model
             return '0:00';
         }
 
-        $totalMinutes = Carbon::parse($this->clock_in_at)
-            ->diffInMinutes($this->clock_out_at);
-
-        $breakMinutes = $this->attendanceBreakTimes->sum(function ($breakTime) {
-            if (!$breakTime->break_end_at) {
-                return 0;
-            }
-            return Carbon::parse($breakTime->break_start_at)
-                ->diffInMinutes($breakTime->break_end_at);
-        });
-
-        $workMinutes = $totalMinutes - $breakMinutes;
+        $totalMinutes = $this->clock_in_at->diffInMinutes($this->clock_out_at);
+        $workMinutes = $totalMinutes - $this->getTotalBreakMinutes();
 
         return sprintf('%d:%02d', intdiv($workMinutes, 60), $workMinutes % 60);
-    }
-
-    /**
-     * この勤怠を登録したユーザー名の取得
-     * 
-     * @return string ユーザー名
-     */
-    public function getUserName(): string
-    {
-        return $this->user->name ?? '';
     }
 }

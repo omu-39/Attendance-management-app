@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .table-row {
+        @apply h-20 border-b-4 border-[#F0EFF2] w-auto;
+    }
+}
+
+@layer components {
+    .input-time {
+        @apply px-5 py-1 border-2 border-[##E1E1E1] rounded-md;
+        appearance: none;
+    }
+    .input-time::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+}
+
+@layer components {
+    .table-heading {
+        @apply w-[200px] text-[#737373] text-left pl-20;
+    }
+}

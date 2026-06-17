@@ -13,7 +13,7 @@
             </button>
             <div class="flex items-center">
                 <div class="pr-2">
-                    <img src="/images/calender.svg" alt="calender">
+                    <img src="/images/calender.svg" alt="calender-img">
                 </div>
                 <span class="text-[20px] text-black">{{ $month }}</span>
             </div>
