@@ -7,8 +7,8 @@
 
     <nav class="w-1/5">
         <ul class="flex justify-end space-x-6 text-[20px]">
-            <li><a href="" class="text-white hover:underline">勤怠</a></li>
-            <li><a href="" class="text-white hover:underline">勤怠一覧</a></li>
+            <li><a href="{{ route('attendance.index') }}" class="text-white hover:underline">勤怠</a></li>
+            <li><a href="{{ route('attendanceList.index') }}" class="text-white hover:underline">勤怠一覧</a></li>
             <li><a href="" class="text-white hover:underline">申請</a></li>
             <li>
                 @if (Auth::check())

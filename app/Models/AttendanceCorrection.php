@@ -17,8 +17,9 @@ class AttendanceCorrection extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'corrected_clock_at',
-        'corrected_out_at',
+        'corrected_work_date',
+        'corrected_clock_in_at',
+        'corrected_clock_out_at',
         'status',
         'remarks',
         'requested_date',

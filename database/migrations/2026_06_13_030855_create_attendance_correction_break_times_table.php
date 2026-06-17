@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('correction_breaks', function (Blueprint $table) {
+        Schema::create('attendance_correction_breaks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('correction_id')->constrained()->cascadeOnDelete();
             $table->dateTime('corrected_break_start_at');
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('correction_break_times');
+        Schema::dropIfExists('attendance_correction_break_times');
     }
 };

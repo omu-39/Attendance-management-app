@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 class Attendance extends Model
 {
@@ -25,6 +26,12 @@ class Attendance extends Model
         'clock_out_at',
     ];
 
+    protected $casts = [
+        'work_date' => 'date',
+        'clock_in_at'  => 'datetime',
+        'clock_out_at' => 'datetime',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -35,7 +42,7 @@ class Attendance extends Model
         return $this->hasOne(AttendanceCorrection::class);
     }
 
-    public function breakTimes(): HasMany
+    public function attendanceBreakTimes(): HasMany
     {
         return $this->hasMany(AttendanceBreakTime::class);
     }
@@ -73,7 +80,7 @@ class Attendance extends Model
      */
     public function isBreaking(): bool
     {
-        return $this->breakTimes()->whereNull('break_end_at')->exists();
+        return $this->AttendanceBreakTimes()->whereNull('break_end_at')->exists();
     }
 
     /**
@@ -99,5 +106,48 @@ class Attendance extends Model
         }
 
         return 'working';
+    }
+
+    /**
+     * 合計休憩時間（分）の取得
+     *
+     * @return int
+     */
+    private function getTotalBreakMinutes(): int
+    {
+        return $this->attendanceBreakTimes->sum(function ($breakTime) {
+            if (!$breakTime->break_end_at) {
+                return 0;
+            }
+            return $breakTime->break_start_at->diffInMinutes($breakTime->break_end_at);
+        });
+    }
+
+    /**
+     * 合計休憩時間の取得
+     *
+     * @return string
+     */
+    public function getTotalBreakTime(): string
+    {
+        $totalMinutes = $this->getTotalBreakMinutes();
+        return sprintf('%d:%02d', intdiv($totalMinutes, 60), $totalMinutes % 60);
+    }
+
+    /**
+     * 合計労働時間の取得
+     *
+     * @return string
+     */
+    public function getTotalWorkTime(): string
+    {
+        if (!$this->clock_in_at || !$this->clock_out_at) {
+            return '0:00';
+        }
+
+        $totalMinutes = $this->clock_in_at->diffInMinutes($this->clock_out_at);
+        $workMinutes = $totalMinutes - $this->getTotalBreakMinutes();
+
+        return sprintf('%d:%02d', intdiv($workMinutes, 60), $workMinutes % 60);
     }
 }

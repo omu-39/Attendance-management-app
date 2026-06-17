@@ -17,7 +17,7 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        $today = Carbon::today()->locale('ja');
+        $today = Carbon::today();
         $nowTime = Carbon::now()->format('H:i');
         $attendance = Attendance::where('user_id', Auth::id())
             ->where('work_date', $today)
@@ -97,7 +97,7 @@ class AttendanceController extends Controller
     {
         $nowTime = Carbon::now();
 
-        $breakTime = $attendance->breakTimes()->whereNull('break_end_at')->firstOrFail();
+        $breakTime = $attendance->AttendanceBreakTimes()->whereNull('break_end_at')->firstOrFail();
         $breakTime->update([
             'break_end_at' => $nowTime,
         ]);
