@@ -24,4 +24,5 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/attendance/list', [AttendanceListController::class, 'index'])->name('attendanceList.index');
     Route::get('/attendance/detail/{id}', [AttendanceListController::class, 'show'])->name('attendanceList.show');
+    Route::post('attendance/detail/{id}', [AttendanceListController::class, 'store'])->name('attendance.store');
 });
